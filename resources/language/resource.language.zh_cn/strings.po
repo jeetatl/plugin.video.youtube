@@ -1097,3 +1097,20 @@ msgstr ""
 msgctxt "#30707"
 msgid "Untitled"
 msgstr ""
+
+msgctxt "#30800"
+msgid "Cache"
+msgstr ""
+
+msgctxt "#30801"
+msgid "Enable auto caching"
+msgstr ""
+
+msgctxt "#30802"
+msgid "Cache location"
+msgstr ""
+
+msgctxt "#30803"
+msgid "Caching is enabled but no save destination is selected. Update cache location under Settings>>Cache>>Cache location"
+msgstr ""
+

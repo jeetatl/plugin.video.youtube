@@ -787,7 +787,6 @@ msgctxt "#30625"
 msgid "InputStream Helper is already installed."
 msgstr ""
 
-
 msgctxt "#30626"
 msgid "Delete temporary files"
 msgstr ""
@@ -1115,3 +1114,20 @@ msgstr ""
 msgctxt "#30707"
 msgid "Untitled"
 msgstr ""
+
+msgctxt "#30800"
+msgid "Cache"
+msgstr ""
+
+msgctxt "#30801"
+msgid "Enable auto caching"
+msgstr ""
+
+msgctxt "#30802"
+msgid "Cache location"
+msgstr ""
+
+msgctxt "#30803"
+msgid "Caching is enabled but no save destination is selected. Update cache location under Settings>>Cache>>Cache location"
+msgstr ""
+
