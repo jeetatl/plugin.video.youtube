@@ -344,7 +344,7 @@ msgstr "請使用瀏覽器開啟下列連結： '%s'"
 
 msgctxt "#30519"
 msgid "and enter the following code:"
-msgstr ""然後輸入認證碼："
+msgstr "然後輸入認證碼："
 
 msgctxt "#30520"
 msgid "Add to..."
@@ -777,3 +777,20 @@ msgstr ""
 msgctxt "#30627"
 msgid "Rate video after watching"
 msgstr ""
+
+msgctxt "#30700"
+msgid "Cache"
+msgstr ""
+
+msgctxt "#30701"
+msgid "Enable auto caching"
+msgstr ""
+
+msgctxt "#30702"
+msgid "Cache location"
+msgstr ""
+
+msgctxt "#30703"
+msgid "Caching is enabled but no save destination is selected. Update cache location under Settings>>Cache>>Cache location"
+msgstr ""
+

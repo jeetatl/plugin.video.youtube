@@ -89,6 +89,12 @@
         <setting id="youtube.api.key.switch.use" type="text" label="" visible="false" enable="true" default=""/>
     </category>
 
+    <!--  Download settings -->
+    <category label="30700">
+        <setting id="youtube.download.enable" type="bool" label="30701" default="false"/>
+        <setting id="youtube.download.location" type="folder" label="30702" default="" />
+    </category>
+
     <!-- Maintenance -->
     <category label="30552">
         <setting id="kodion.maintain.clear.func" type="action" label="30555" action="RunPlugin(plugin://plugin.video.youtube/maintain/function_cache/clear/)"/>
