@@ -61,6 +61,9 @@ def play_video(provider, context, re_match):
         if video_stream.get('headers', ''):
             video_item.set_headers(video_stream.get('headers', ''))
 
+        if video_stream.get('container'):
+            video_item.set_container(video_stream.get('container'))
+
         video_id_dict = {video_id: video_item}
         utils.update_video_infos(provider, context, video_id_dict)
 

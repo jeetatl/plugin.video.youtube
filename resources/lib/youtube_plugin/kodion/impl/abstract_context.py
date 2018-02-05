@@ -183,7 +183,9 @@ class AbstractContext(object):
         raise NotImplementedError()
 
     def log(self, text, log_level=constants.log.NOTICE):
-        log_line = '[%s] %s' % (self.get_id(), text)
+        COLOR = '\033[1;36m'
+        NC = '\033[0m'
+        log_line = '[%s%s%s] %s' % (COLOR, self.get_id(), NC, text)
         log(log_line, log_level)
 
     def log_warning(self, text):

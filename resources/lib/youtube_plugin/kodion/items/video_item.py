@@ -31,6 +31,7 @@ class VideoItem(BaseItem):
         self._mediatype = None
         self.subtitles = None
         self._headers = None
+        self._container = u''
 
     def set_play_count(self, play_count):
         self._play_count = int(play_count)
@@ -196,3 +197,10 @@ class VideoItem(BaseItem):
 
     def get_headers(self):
         return self._headers
+
+    def set_container(self, container):
+        self._container = container
+
+    def get_container(self):
+        return self._container
+
