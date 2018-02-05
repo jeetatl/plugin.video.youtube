@@ -2,7 +2,7 @@ __all__ = ['SearchHistory', 'FavoriteList', 'WatchLaterList', 'FunctionCache', '
            'strip_html_from_text', 'create_path', 'create_uri_path', 'find_best_fit', 'to_unicode', 'to_utf8',
            'datetime_parser', 'select_stream', 'get_http_server', 'is_httpd_live', 'YouTubeMonitor', 'YouTubePlayer',
            'make_dirs', 'loose_version', 'ip_api', 'PlaybackHistory', 'DataCache', 'get_client_ip_address',
-           'SystemVersion']
+           'SystemVersion', 'get_proxy_server', 'is_proxy_live', 'BackgroundStreamSaver']
 
 from . import datetime_parser
 from .methods import loose_version
@@ -20,3 +20,4 @@ from .playback_history import PlaybackHistory
 from .data_cache import DataCache
 from .system_version import SystemVersion
 from . import ip_api
+from .worker import BackgroundStreamSaver

@@ -9,7 +9,7 @@ from base64 import b64decode
 
 from ..youtube.helper import yt_subscriptions
 from .. import kodion
-from ..kodion.utils import FunctionCache, strip_html_from_text, get_client_ip_address, is_httpd_live
+from ..kodion.utils import FunctionCache, strip_html_from_text, get_client_ip_address, is_httpd_live, BackgroundStreamSaver
 from ..kodion.items import *
 from ..youtube.client import YouTube
 from .helper import v3, ResourceManager, yt_specials, yt_playlist, yt_login, yt_setup_wizard, yt_video, \
@@ -19,6 +19,8 @@ from .youtube_exceptions import LoginException
 import xbmc
 import xbmcaddon
 import xbmcvfs
+import xbmcgui
+from builtins import str
 
 
 class Provider(kodion.AbstractProvider):
@@ -624,11 +626,49 @@ class Provider(kodion.AbstractProvider):
                 context.get_ui().set_home_window_property('prompt_for_subtitles', params['video_id'])
                 context.execute('PlayMedia(%s)' % context.create_uri(['play'], {'video_id': params['video_id']}))
                 return
+
         if 'video_id' in params and not 'playlist_id' in params:
             resource_manager = self.get_resource_manager(context)
             video = resource_manager.get_videos([params['video_id']])
             context.set_param('embeddable', video.get(params['video_id'], {}).get('status', {}).get('embeddable', False))
-            return yt_play.play_video(self, context, re_match)
+
+            video_item = yt_play.play_video(self, context, re_match)
+            if (video_item):
+                dl_enabled = context.get_settings().get_bool('youtube.download.enable', False)
+                dl_location = context.get_settings().get_string('youtube.download.location', '').strip()
+
+                context.log_debug("Caching Video Content Enabled: [%s]" % (dl_enabled))
+                context.log_debug("Cache Content Location: [%s]" % (dl_location))
+
+                if dl_enabled:
+                    if xbmcvfs.exists(dl_location):
+                        hex_video_id = params['video_id'].encode('hex')
+                        context.log_debug("Video ID [%s] converted to HEX: [%s].  Container type [%s]" % (params['video_id'], hex_video_id, video_item.get_container()))
+                        complete_path = os.path.join(dl_location, hex_video_id + '.' + video_item.get_container())
+                        if xbmcvfs.exists(complete_path):
+                            context.log_debug('Found Video Cache for Video ID [%s] at [%s]' % (params['video_id'], str(complete_path)))
+                            video_item.set_uri(str(complete_path))
+                            context.get_ui().show_notification(context.localize(30704), time_milliseconds=3000)
+                        else:
+                            context.log_debug('Video cache does not exist for VideoID[%s] Hex[%s]' % (params['video_id'], hex_video_id))
+                            context.log_debug('Attempt to download it here...')
+                            context.get_ui().show_notification(context.localize(30705), time_milliseconds=3000)
+                            print video_item.get_uri()
+                            video_stream_saver = BackgroundStreamSaver(
+                                url=video_item.get_uri(),
+                                file_path=complete_path)
+                            video_stream_saver.start()
+
+                            video_item.set_uri(str(complete_path))
+
+                            # Allow some time to download part of the file before playing
+                            context.sleep(2000)
+                            return video_item
+                    else:
+                        xbmcgui.Dialog().ok(context.get_name(), context.localize(30703))
+                    return video_item
+                else:
+                    return video_item
         elif 'playlist_id' in params:
             return yt_play.play_playlist(self, context, re_match)
         elif 'channel_id' in params and 'live' in params:

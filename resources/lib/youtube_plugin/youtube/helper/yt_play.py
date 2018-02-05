@@ -64,6 +64,14 @@ def play_video(provider, context, re_match):
         incognito = str(context.get_param('incognito', False)).lower() == 'true'
         use_play_data = not is_live and not screensaver and not incognito
 
+        if video_stream.get('headers', ''):
+            video_item.set_headers(video_stream.get('headers', ''))
+
+        if video_stream.get('container'):
+            video_item.set_container(video_stream.get('container'))
+
+        video_id_dict = {video_id: video_item}
+        utils.update_video_infos(provider, context, video_id_dict)
         video_item = utils.update_play_info(provider, context, video_id, video_item, video_stream, use_play_data=use_play_data)
 
         # Trigger post play events

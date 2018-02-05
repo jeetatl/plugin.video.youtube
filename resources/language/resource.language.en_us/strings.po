@@ -1131,3 +1131,11 @@ msgctxt "#30803"
 msgid "Caching is enabled but no save destination is selected. Update cache location under Settings>>Cache>>Cache location"
 msgstr ""
 
+msgctxt "#30804"
+msgid "Playing cached stream"
+msgstr ""
+
+msgctxt "#30805"
+msgid "Saving stream"
+msgstr ""
+

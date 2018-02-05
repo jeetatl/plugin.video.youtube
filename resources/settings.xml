@@ -126,7 +126,7 @@
     <!--  Download settings -->
     <category label="30800">
         <setting id="youtube.download.enable" type="bool" label="30801" default="false"/>
-        <setting id="youtube.download.location" type="folder" label="30802" default="" />
+        <setting id="youtube.download.location" type="folder" label="30802" default="" enable="eq(-1,true)"/>
     </category>
 
     <!-- Maintenance -->

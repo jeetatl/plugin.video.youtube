@@ -215,8 +215,11 @@ class AbstractContext(object):
     def add_sort_method(self, *sort_methods):
         raise NotImplementedError()
 
-    def log(self, text, log_level=logger.NOTICE):
-        logger.log(text, log_level, self.get_id())
+    def log(self, text, log_level=constants.log.NOTICE):
+        COLOR = '\033[1;36m'
+        NC = '\033[0m'
+        log_line = '[%s%s%s] %s' % (COLOR, self.get_id(), NC, text)
+        log(log_line, log_level)
 
     def log_warning(self, text):
         self.log(text, logger.WARNING)

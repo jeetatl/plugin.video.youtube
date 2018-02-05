@@ -38,6 +38,7 @@ class VideoItem(BaseItem):
         self._headers = None
         self.license_key = None
         self._video_id = None
+        self._container = u''
 
     def set_play_count(self, play_count):
         self._play_count = int(play_count)
@@ -255,3 +256,10 @@ class VideoItem(BaseItem):
     @video_id.setter
     def video_id(self, value):
         self._video_id = value
+
+    def set_container(self, container):
+        self._container = container
+
+    def get_container(self):
+        return self._container
+
