@@ -648,11 +648,13 @@ class Provider(kodion.AbstractProvider):
                         if xbmcvfs.exists(complete_path):
                             context.log_debug('Found Video Cache for Video ID [%s] at [%s]' % (params['video_id'], str(complete_path)))
                             video_item.set_uri(str(complete_path))
-                            context.get_ui().show_notification(context.localize(30704), time_milliseconds=3000)
+                            if context.get_settings().get_bool('youtube.download.notification.enable', False):
+                                context.get_ui().show_notification(context.localize(30704), time_milliseconds=3000)
                         else:
                             context.log_debug('Video cache does not exist for VideoID[%s] Hex[%s]' % (params['video_id'], hex_video_id))
                             context.log_debug('Attempt to download it here...')
-                            context.get_ui().show_notification(context.localize(30705), time_milliseconds=3000)
+                            if context.get_settings().get_bool('youtube.download.notification.enable', False):
+                                context.get_ui().show_notification(context.localize(30705), time_milliseconds=3000)
                             print video_item.get_uri()
                             video_stream_saver = BackgroundStreamSaver(
                                 url=video_item.get_uri(),
