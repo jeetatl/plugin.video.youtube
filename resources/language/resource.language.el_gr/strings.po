@@ -818,3 +818,7 @@ msgctxt "#30705"
 msgid "Saving stream"
 msgstr ""
 
+msgctxt "#30706"
+msgid "Show notifications"
+msgstr ""
+

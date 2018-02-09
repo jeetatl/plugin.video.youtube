@@ -93,6 +93,7 @@
     <category label="30700">
         <setting id="youtube.download.enable" type="bool" label="30701" default="false"/>
         <setting id="youtube.download.location" type="folder" label="30702" default="" enable="eq(-1,true)"/>
+        <setting id="youtube.download.notification.enable" type="bool" label="30706" default="true" enable="true"/>
     </category>
 
     <!-- Maintenance -->
