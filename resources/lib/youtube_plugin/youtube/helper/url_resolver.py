@@ -1,11 +1,9 @@
-from future import standard_library
-standard_library.install_aliases()
-from builtins import object
-import re
-
 __author__ = 'bromix'
 
-import urllib.parse
+from six.moves import urllib
+
+import re
+
 from ...kodion.utils import FunctionCache
 from ...kodion import Context as _Context
 import requests
@@ -13,7 +11,7 @@ import requests
 
 class AbstractResolver(object):
     def __init__(self):
-        self._verify = _Context().get_settings().verify_ssl()
+        self._verify = _Context(plugin_id='plugin.video.youtube').get_settings().verify_ssl()
 
     def supports_url(self, url, url_components):
         raise NotImplementedError()
@@ -114,7 +112,7 @@ class CommonResolver(AbstractResolver, list):
 
                     # some server return 301 for HEAD requests
                     # we just compare the new location - if it's equal we can return the url
-                    if location == _url or location + '/' == _url or location == _url + '/':
+                    if location == _url or ''.join([location, '/']) == _url or location == ''.join([_url, '/']):
                         return _url
 
                     if location:

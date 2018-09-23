@@ -1,6 +1,3 @@
-from __future__ import division
-from builtins import str
-from past.utils import old_div
 from functools import partial
 import hashlib
 import datetime
@@ -15,7 +12,8 @@ class FunctionCache(Storage):
     ONE_WEEK = 7 * ONE_DAY
     ONE_MONTH = 4 * ONE_WEEK
 
-    def __init__(self, filename, max_file_size_kb=-1):
+    def __init__(self, filename, max_file_size_mb=5):
+        max_file_size_kb = max_file_size_mb * 1024
         Storage.__init__(self, filename, max_file_size_kb=max_file_size_kb)
 
         self._enabled = True
@@ -71,7 +69,7 @@ class FunctionCache(Storage):
     def get(self, seconds, func, *args, **keywords):
         def _seconds_difference(_first, _last):
             _delta = _last - _first
-            return 24 * 60 * 60 * _delta.days + _delta.seconds + old_div(_delta.microseconds, 1000000.)
+            return 24 * 60 * 60 * _delta.days + _delta.seconds + (_delta.microseconds // 1000000.)
 
         """
         Returns the cached data of the given function.
@@ -105,3 +103,8 @@ class FunctionCache(Storage):
             self._set(cache_id, cached_data)
 
         return cached_data
+
+    def _optimize_item_count(self):
+        # override method from resources/lib/youtube_plugin/kodion/utils/storage.py
+        # for function cache do not optimize by item count, using database size.
+        pass

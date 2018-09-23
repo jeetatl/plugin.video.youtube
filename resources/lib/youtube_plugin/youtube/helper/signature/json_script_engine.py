@@ -1,6 +1,5 @@
-from builtins import range
-from builtins import object
 __author__ = 'bromix'
+from six.moves import range
 
 
 class JsonScriptEngine(object):
@@ -12,7 +11,7 @@ class JsonScriptEngine(object):
 
         _actions = self._json_script['actions']
         for action in _actions:
-            func = '_' + action['func']
+            func = ''.join(['_', action['func']])
             params = action['params']
 
             if func == '_return':
@@ -33,24 +32,30 @@ class JsonScriptEngine(object):
 
         return _signature
 
-    def _join(self, signature):
+    @staticmethod
+    def _join(signature):
         return ''.join(signature)
 
-    def _list(self, signature):
+    @staticmethod
+    def _list(signature):
         return list(signature)
 
-    def _slice(self, signature, b):
+    @staticmethod
+    def _slice(signature, b):
         del signature[b:]
         return signature
 
-    def _splice(self, signature, a, b):
+    @staticmethod
+    def _splice(signature, a, b):
         del signature[a:b]
         return signature
 
-    def _reverse(self, signature):
+    @staticmethod
+    def _reverse(signature):
         return signature[::-1]
 
-    def _swap(self, signature, b):
+    @staticmethod
+    def _swap(signature, b):
         c = signature[0]
         signature[0] = signature[b % len(signature)]
         signature[b] = c

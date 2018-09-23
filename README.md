@@ -9,9 +9,10 @@
 # **Links:**
 
 * [YouTube](http://www.youtube.com)
-* [Support thread](http://forum.kodi.tv/showthread.php?tid=267160)
+* [Support thread](http://forum.kodi.tv/showthread.php?tid=325740)
 
 # **Images:**
-![](http://i.imgur.com/W5UEby8.png)
-![](http://i.imgur.com/rfqpIYC.png)
-![](http://i.imgur.com/hoIuZ1K.png)
+![](https://i.imgur.com/WvJRshc.png)
+![](https://i.imgur.com/imNpGdh.png)
+![](https://i.imgur.com/xpKkCs9.png)
+![](https://i.imgur.com/B3nCDSe.png)

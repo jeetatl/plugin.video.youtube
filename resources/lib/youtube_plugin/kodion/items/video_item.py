@@ -1,4 +1,3 @@
-from builtins import str
 import re
 import datetime
 
@@ -12,6 +11,8 @@ class VideoItem(BaseItem):
         BaseItem.__init__(self, name, uri, image, fanart)
         self._genre = None
         self._aired = None
+        self._aired_utc = None
+        self._scheduled_start_utc = None
         self._duration = None
         self._director = None
         self._premiered = None
@@ -29,8 +30,14 @@ class VideoItem(BaseItem):
         self._play_count = None
         self._uses_dash = None
         self._mediatype = None
+        self._last_played = None
+        self._start_percent = None
+        self._start_time = None
+        self._live = False
         self.subtitles = None
         self._headers = None
+        self.license_key = None
+        self._video_id = None
         self._container = u''
 
     def set_play_count(self, play_count):
@@ -42,19 +49,19 @@ class VideoItem(BaseItem):
     def add_artist(self, artist):
         if self._artist is None:
             self._artist = []
-        self._artist.append(str(artist))
+        self._artist.append(artist)
 
     def get_artist(self):
         return self._artist
 
     def set_studio(self, studio):
-        self._studio = str(studio)
+        self._studio = studio
 
     def get_studio(self):
         return self._studio
 
     def set_title(self, title):
-        self._title = str(title)
+        self._title = title
         self._name = self._title
 
     def get_title(self):
@@ -86,7 +93,7 @@ class VideoItem(BaseItem):
         return self._premiered
 
     def set_plot(self, plot):
-        self._plot = str(plot)
+        self._plot = plot
 
     def get_plot(self):
         return self._plot
@@ -98,7 +105,7 @@ class VideoItem(BaseItem):
         return self._rating
 
     def set_director(self, director_name):
-        self._director = str(director_name)
+        self._director = director_name
 
     def get_director(self):
         return self._director
@@ -152,14 +159,34 @@ class VideoItem(BaseItem):
         date = datetime.date(year, month, day)
         self._aired = date.isoformat()
 
+    def set_aired_utc(self, dt):
+        self._aired_utc = dt
+
+    def get_aired_utc(self):
+        return self._aired_utc
+
     def set_aired_from_datetime(self, date_time):
         self.set_aired(year=date_time.year, month=date_time.month, day=date_time.day)
+
+    def set_scheduled_start_utc(self, dt):
+        self._scheduled_start_utc = dt
+
+    def get_scheduled_start_utc(self):
+        return self._scheduled_start_utc
+
+    @property
+    def live(self):
+        return self._live
+
+    @live.setter
+    def live(self, value):
+        self._live = value
 
     def get_aired(self):
         return self._aired
 
     def set_genre(self, genre):
-        self._genre = str(genre)
+        self._genre = genre
 
     def get_genre(self):
         return self._genre
@@ -197,6 +224,38 @@ class VideoItem(BaseItem):
 
     def get_headers(self):
         return self._headers
+
+    def set_license_key(self, url):
+        self.license_key = url
+
+    def get_license_key(self):
+        return self.license_key
+
+    def set_last_played(self, last_played):
+        self._last_played = last_played
+
+    def get_last_played(self):
+        return self._last_played
+
+    def set_start_percent(self, start_percent):
+        self._start_percent = start_percent
+
+    def get_start_percent(self):
+        return self._start_percent
+
+    def set_start_time(self, start_time):
+        self._start_time = start_time
+
+    def get_start_time(self):
+        return self._start_time
+
+    @property
+    def video_id(self):
+        return self._video_id
+
+    @video_id.setter
+    def video_id(self, value):
+        self._video_id = value
 
     def set_container(self, container):
         self._container = container

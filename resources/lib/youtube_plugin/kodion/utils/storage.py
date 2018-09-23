@@ -1,25 +1,21 @@
-from __future__ import division
-from future import standard_library
-standard_library.install_aliases()
-from builtins import range
-from builtins import object
-from past.utils import old_div
 __author__ = 'bromix'
+
+from six import PY2
+from six.moves import range
+from six.moves import cPickle as pickle
 
 import datetime
 import os
 import sqlite3
 import time
 
-import pickle as pickle
-
 
 class Storage(object):
-    def __init__(self, filename, max_item_count=1000, max_file_size_kb=-1):
+    def __init__(self, filename, max_item_count=0, max_file_size_kb=-1):
         self._table_name = 'storage'
         self._filename = filename
         if not self._filename.endswith('.sqlite'):
-            self._filename += '.sqlite'
+            self._filename = ''.join([self._filename, '.sqlite'])
         self._file = None
         self._cursor = None
         self._max_item_count = max_item_count
@@ -45,8 +41,9 @@ class Storage(object):
             if not os.path.exists(path):
                 os.makedirs(path)
 
-            self._file = sqlite3.connect(self._filename, check_same_thread=False, detect_types=sqlite3.PARSE_DECLTYPES,
-                                         timeout=1)
+            self._file = sqlite3.connect(self._filename, check_same_thread=False,
+                                         detect_types=sqlite3.PARSE_DECLTYPES, timeout=1)
+
             self._file.isolation_level = None
             self._cursor = self._file.cursor()
             self._cursor.execute('PRAGMA journal_mode=MEMORY')
@@ -61,15 +58,15 @@ class Storage(object):
 
         """
         Tests revealed that sqlite has problems to release the database in time. This happens no so often, but just to
-        be sure, we try at least 5 times to execute out statement.
+        be sure, we try at least 3 times to execute out statement.
         """
-        for tries in range(5):
+        for tries in range(3):
             try:
                 return self._cursor.execute(query, values)
             except TypeError:
                 return None
             except:
-                time.sleep(2)
+                time.sleep(0.1)
         else:
             return None
 
@@ -95,9 +92,12 @@ class Storage(object):
         if not os.path.exists(self._filename):
             return
 
-        file_size_kb = old_div(os.path.getsize(self._filename), 1024)
-        if file_size_kb >= self._max_file_size_kb:
-            os.remove(self._filename)
+        try:
+            file_size_kb = (os.path.getsize(self._filename) // 1024)
+            if file_size_kb >= self._max_file_size_kb:
+                os.remove(self._filename)
+        except OSError:
+            pass
 
     def _create_table(self):
         self._open()
@@ -121,10 +121,12 @@ class Storage(object):
             now += datetime.timedelta(microseconds=1)  # add 1 microsecond, required for dbapi2
         query = 'REPLACE INTO %s (key,time,value) VALUES(?,?,?)' % self._table_name
         self._execute(True, query, values=[item_id, now, _encode(item)])
-        self._optimize_item_count()
         self._close()
+        self._optimize_item_count()
 
     def _optimize_item_count(self):
+        if self._max_item_count < 1:
+            return
         self._open()
         query = 'SELECT key FROM %s ORDER BY time DESC LIMIT -1 OFFSET %d' % (self._table_name, self._max_item_count)
         result = self._execute(False, query)
@@ -138,6 +140,9 @@ class Storage(object):
         query = 'DELETE FROM %s' % self._table_name
         self._execute(True, query)
         self._create_table()
+        self._close()
+        self._open()
+        self._execute(False, 'VACUUM')
         self._close()
 
     def _is_empty(self):
@@ -173,6 +178,8 @@ class Storage(object):
 
     def _get(self, item_id):
         def _decode(obj):
+            if PY2:
+                obj = str(obj)
             return pickle.loads(obj)
 
         self._open()

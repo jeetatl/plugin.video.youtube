@@ -1,18 +1,14 @@
-from __future__ import print_function
-from future import standard_library
-standard_library.install_aliases()
-from builtins import str
-from builtins import object
 __author__ = 'bromix'
 
+from six.moves import urllib
+
 import time
-import urllib.parse
 import requests
 from ...youtube.youtube_exceptions import LoginException
 from ...kodion import Context
-from .__config__ import api, youtube_tv, keys_changed
+from .__config__ import api, youtube_tv, developer_keys, keys_changed
 
-context = Context()
+context = Context(plugin_id='plugin.video.youtube')
 
 
 class LoginClient(object):
@@ -30,7 +26,8 @@ class LoginClient(object):
             'key': api['key'],
             'id': api['id'],
             'secret': api['secret']
-        }
+        },
+        'developer': developer_keys
     }
 
     def __init__(self, config=None, language='en-US', region='', access_token='', access_token_tv=''):
@@ -57,6 +54,12 @@ class LoginClient(object):
             self._log_error_callback(text)
         else:
             print(text)
+
+    def set_access_token(self, access_token=''):
+        self._access_token = access_token
+
+    def set_access_token_tv(self, access_token_tv=''):
+        self._access_token_tv = access_token_tv
 
     def revoke(self, refresh_token):
         # https://developers.google.com/youtube/v3/guides/auth/devices
